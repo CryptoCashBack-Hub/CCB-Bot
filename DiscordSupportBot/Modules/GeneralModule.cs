@@ -28,7 +28,7 @@ namespace DiscordSupportBot.Modules
             builder.WithTitle("Ipsum Bot Help")
                 .WithColor(Discord.Color.Blue)
                 .WithThumbnailUrl("https://masternodes.online/coin_image/IPS.png")
-                .WithFooter("https://ipsum.network/")
+                .WithFooter("https://github.com/CryptoCashBack-Hub")
 
                 .AddField("//help", "shows available commands")
                 .AddField("//ipsum or //ips", "shows coin info")
@@ -47,6 +47,26 @@ namespace DiscordSupportBot.Modules
             await this.Context.Guild.GetTextChannel(DiscordSupportBot.Common.DiscordData.BotChannel)
                 .SendMessageAsync(isBotChannel ? string.Empty : this.Context.Message.Author.Mention, false, builder.Build());
         }
+
+        [Command("guide")]
+        [Alias("guides")]
+        public async Task guide()
+        {
+            var builder = new EmbedBuilder();
+
+            builder.WithTitle("Master List of Guides").WithColor(Discord.Color.Blue)
+                .WithDescription("\u200b")
+                .WithUrl("https://github.com/CryptoCashBack-Hub/CCB_Guides")
+                .WithThumbnailUrl("https://masternodes.online/coin_image/CCB.png")
+
+                .AddField("The current wallet download", "https://github.com/CryptoCashBack-Hub/CCB/releases")
+                .AddField("Complete install script for vps", "https://github.com/CryptoCashBack-Hub/CCB_Sripts")
+                .AddField("Configuration Seed List", "https://github.com/CryptoCashBack-Hub/CCB_Guides/blob/master/Seeds");
+
+            await this.ReplyAsync(string.Empty, false, builder.Build());
+        }
+
+
         /*
         [Command("createpoll")]
         [Alias("poll")]
@@ -165,31 +185,15 @@ namespace DiscordSupportBot.Modules
         [Alias("version")]
         public async Task CurrentBuild()
         {
-            var data = this.GetGithubReleaseData();
-
             var builder = new EmbedBuilder();
 
-            if (data.Result != null)
-            {
-                builder.WithTitle($"The current build is: {data.Result.ReleaseName} - {data.Result.TagName}")
-                    .WithColor(Discord.Color.Blue)
-                    .WithThumbnailUrl("https://masternodes.online/coin_image/CCB.png")
-                    .WithDescription("\u200b")
-                    .AddField("Please update your wallets and masternodes!", "https://github.com/CryptoCashBack/CryptoCashBack/releases/");
-            }
-            else
-            {
-                builder.WithTitle($"Bot was not able to get the latest version, please check the link below for latest release")
-                    .WithColor(Discord.Color.Blue)
-                    .WithThumbnailUrl("https://masternodes.online/coin_image/CCB.png")
-                    .WithDescription("\u200b")
-                    .AddField("Please update your wallets and masternodes!", "https://github.com/CryptoCashBack/CryptoCashBack/releases/");
-            }
+            builder.WithTitle("The current build is on v1.0.0.1").WithColor(Discord.Color.Blue)
+                .WithThumbnailUrl("https://masternodes.online/coin_image/CCB.png")
+                .WithDescription("\u200b")
 
-            var isBotChannel = this.Context.Channel.Id.Equals(DiscordSupportBot.Common.DiscordData.BotChannel);
+                .AddField("Current wallet build!", "https://github.com/CryptoCashBack/CryptoCashBack/releases/");
 
-            await this.Context.Guild.GetTextChannel(DiscordSupportBot.Common.DiscordData.BotChannel)
-                .SendMessageAsync(isBotChannel ? string.Empty : this.Context.Message.Author.Mention, false, builder.Build());
+            await this.ReplyAsync(string.Empty, false, builder.Build());
         }
         /*
         private string GetVoteOptions(string[] options)
