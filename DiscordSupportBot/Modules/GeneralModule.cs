@@ -3,6 +3,7 @@ namespace DiscordSupportBot.Modules
     using Discord;
     using Discord.Commands;
     using Discord.WebSocket;
+ //   using DiscordSupportBot.Models.General;
     using DiscordSupportBot.Common;
     using DiscordSupportBot.Models.Exchanges;
     using DiscordSupportBot.Models.Github;
@@ -33,17 +34,20 @@ namespace DiscordSupportBot.Modules
                 .AddField("//ipsum or //ips", "shows coin info")
                 .AddField("//guides or //guide", "replies with current installation guides")
                 .AddField("//mnstatus <pubkey> or //masternode <pubkey>", "checks the status of your masternode")
-                .AddField("//mnconnect <ip:port>", "checks the connection status of your masternode")
+
                 .AddField("//price <ticker> or //checkprice <ticker>", "replies with cmc price")
-                .AddField("//donate or //donations", "replies with IPS, BTC donation address and balances")
-                .AddField("//build", "replies with current wallet and masternode build");
+                .AddField("//donate or //donations", "replies with Dev IPS and BTC donation address")
+                .AddField("//build or //version", "replies with current wallet realse link");
+
+                
+
 
             var isBotChannel = this.Context.Channel.Id.Equals(DiscordSupportBot.Common.DiscordData.BotChannel);
 
             await this.Context.Guild.GetTextChannel(DiscordSupportBot.Common.DiscordData.BotChannel)
                 .SendMessageAsync(isBotChannel ? string.Empty : this.Context.Message.Author.Mention, false, builder.Build());
         }
-
+        /*
         [Command("createpoll")]
         [Alias("poll")]
         public async Task Poll(string question, params string[] options)
@@ -73,7 +77,7 @@ namespace DiscordSupportBot.Modules
                 await this.Context.Message.Author.SendMessageAsync($"not enough permissions for the usage of poll command!");
             }
         }
-
+        
         [Command("ipsum")]
         [Alias("ips")]
         public async Task Ipsum()
@@ -108,7 +112,7 @@ namespace DiscordSupportBot.Modules
             await this.Context.Guild.GetTextChannel(DiscordSupportBot.Common.DiscordData.BotChannel)
                 .SendMessageAsync(isBotChannel ? string.Empty : this.Context.Message.Author.Mention, false, builder.Build());
         }
-
+        
         [Command("guide")]
         [Alias("guides")]
         public async Task Guide()
@@ -156,7 +160,7 @@ namespace DiscordSupportBot.Modules
             await this.Context.Guild.GetTextChannel(DiscordSupportBot.Common.DiscordData.BotChannel)
                 .SendMessageAsync(isBotChannel ? string.Empty : this.Context.Message.Author.Mention, false, builder.Build());
         }
-
+        */
         [Command("build")]
         [Alias("version")]
         public async Task CurrentBuild()
@@ -169,17 +173,17 @@ namespace DiscordSupportBot.Modules
             {
                 builder.WithTitle($"The current build is: {data.Result.ReleaseName} - {data.Result.TagName}")
                     .WithColor(Discord.Color.Blue)
-                    .WithThumbnailUrl("https://masternodes.online/coin_image/IPS.png")
+                    .WithThumbnailUrl("https://masternodes.online/coin_image/CCB.png")
                     .WithDescription("\u200b")
-                    .AddField("Please update your wallets and masternodes!", "https://github.com/ipsum-network/ips/releases");
+                    .AddField("Please update your wallets and masternodes!", "https://github.com/CryptoCashBack/CryptoCashBack/releases/");
             }
             else
             {
                 builder.WithTitle($"Bot was not able to get the latest version, please check the link below for latest release")
                     .WithColor(Discord.Color.Blue)
-                    .WithThumbnailUrl("https://masternodes.online/coin_image/IPS.png")
+                    .WithThumbnailUrl("https://masternodes.online/coin_image/CCB.png")
                     .WithDescription("\u200b")
-                    .AddField("Please update your wallets and masternodes!", "https://github.com/ipsum-network/ips/releases");
+                    .AddField("Please update your wallets and masternodes!", "https://github.com/CryptoCashBack/CryptoCashBack/releases/");
             }
 
             var isBotChannel = this.Context.Channel.Id.Equals(DiscordSupportBot.Common.DiscordData.BotChannel);
@@ -187,7 +191,7 @@ namespace DiscordSupportBot.Modules
             await this.Context.Guild.GetTextChannel(DiscordSupportBot.Common.DiscordData.BotChannel)
                 .SendMessageAsync(isBotChannel ? string.Empty : this.Context.Message.Author.Mention, false, builder.Build());
         }
-
+        /*
         private string GetVoteOptions(string[] options)
         {
             var result = string.Empty;
@@ -199,7 +203,7 @@ namespace DiscordSupportBot.Modules
 
             return result;
         }
-
+        
         private async Task<Graviex> GetGraviexData()
         {
             var response = await client.GetStringAsync($"https://graviex.net:443//api/v2/tickers/ipsbtc.json");
@@ -207,12 +211,12 @@ namespace DiscordSupportBot.Modules
 
             return result;
         }
-
+        */
         private async Task<GithubRelease> GetGithubReleaseData()
         {
             client.DefaultRequestHeaders.Add("User-Agent", "request");
 
-            var response = await client.GetStringAsync($"https://api.github.com/repos/ipsum-network/ips/releases/latest");
+            var response = await client.GetStringAsync($"https://github.com/CryptoCashBack/CryptoCashBack/releases/");
             var result = JsonConvert.DeserializeObject<GithubRelease>(response.ToString());
 
             return result;

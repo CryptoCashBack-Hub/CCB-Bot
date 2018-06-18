@@ -25,10 +25,9 @@
             this.Services = new ServiceCollection()
                 .AddSingleton(this.Client)
                 .AddSingleton(this.Commands)
-                .AddDbContext<DiscordSupportBot.DAL.Context.DiscordSupportBotDbContext>()
                 .BuildServiceProvider();
 
-            var botToken = "";
+            var botToken = "NDU3NzY1NjIwMDcxNTMwNTM2.DggX5w.pvdWgW2GbUL3wyOoLzN9LKnpzlg";
 
             this.Client.Log += Log;
             this.Client.MessageReceived += HandleCommandAsync;

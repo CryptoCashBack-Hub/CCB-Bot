@@ -4,11 +4,9 @@ namespace DiscordSupportBot.Common
 {
     public static class DiscordData
     {
-        public static ulong BotChannel { get => 445809313655554048; }
+        public static ulong BotChannel { get => 454464504290476033; }
 
-        public static ulong BotTestingChannel { get => 446659144351612928; }
-
-        public static ulong BotPollChannel { get => 448074721389576193; }
+        public static ulong BotTestingChannel { get => 457926138010927105; }
     }
 }
 
