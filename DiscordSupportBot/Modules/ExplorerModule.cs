@@ -32,14 +32,39 @@ namespace DiscordSupportBot.Modules
         [Command("stats")]
         public async Task Stats()
         {
-            
+            var result = await this.GetStats();
 
             EmbedBuilder builder = new EmbedBuilder();
 
-            builder.WithTitle("test");
-            await this.Context.Message.Author.SendMessageAsync(string.Empty, false, builder.Build());
+            builder.WithTitle("Stats").WithColor(Discord.Color.Blue);
+            builder.AddInlineField("Difficulty", result.Difficulty);
+            builder.AddInlineField("Masternodes Count", result.MasternodeCount);
+            builder.AddInlineField("Block Count", result.Block);
+
+            await this.ReplyAsync(string.Empty, false, builder.Build());
         }
 
+
+
+
+
+        private async Task<ExplorerStatsResponse> GetStats()
+        {
+            var difficultyResponse = await client.GetAsync($"http://explorer.ccb.cash/api/getdifficulty");
+            var masternodeResponse = await client.GetAsync($"http://explorer.ccb.cash/api/getmasternodecount");
+            var supplyResponse = await client.GetAsync($"https://explorer.ipsum.network/api/getsupply");
+            var blockResponse = await client.GetAsync($"http://explorer.ccb.cash/api/getblockcount");
+
+            var result = new ExplorerStatsResponse
+            {
+                Difficulty = float.Parse(difficultyResponse.Content.ReadAsStringAsync().Result),
+                MasternodeCount = int.Parse(JsonConvert.DeserializeObject<dynamic>(masternodeResponse.Content.ReadAsStringAsync().Result).ToString()),
+                Block = int.Parse(JsonConvert.DeserializeObject<dynamic>(blockResponse.Content.ReadAsStringAsync().Result).ToString()),
+            };
+
+            return result;
+        }
+       
 
         private async Task<string> GetAddressBalance(string address)
         {
@@ -50,6 +75,21 @@ namespace DiscordSupportBot.Modules
         }
 
 
+
+
+        public class ExplorerStatsResponse
+        {
+            public float Difficulty { get; set; }
+            public int MasternodeCount { get; set; }
+            public int Block { get; set; }
         }
+
+        public enum StatsDataType
+        {
+            Difficulty,
+            MasternodeCount
+        }
+
+    }
     }
 
