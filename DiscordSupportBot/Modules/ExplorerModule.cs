@@ -36,11 +36,13 @@ namespace DiscordSupportBot.Modules
 
             EmbedBuilder builder = new EmbedBuilder();
 
-            builder.WithTitle("Stats").WithColor(Discord.Color.Blue);
-            builder.AddInlineField("Difficulty", result.Difficulty);
-            builder.AddInlineField("Masternodes Count", result.MasternodeCount);
-            builder.AddInlineField("Block Count", result.Block);
-
+            builder.WithTitle("Current Statistics for CCB").WithColor(Discord.Color.Blue)
+                .WithThumbnailUrl("https://masternodes.online/coin_image/CCB.png")
+                .AddInlineField("Difficulty", result.Difficulty)
+                .AddInlineField("Masternodes Count", result.MasternodeCount)
+                .AddInlineField("Block Count", result.Block)
+                .AddInlineField("Supply Count",result.Supply + "  CCB")
+                .WithFooter("All block rewards are split: 70% Masternode, 30% Staking and 0% Development fee");
             await this.ReplyAsync(string.Empty, false, builder.Build());
         }
 
@@ -48,18 +50,20 @@ namespace DiscordSupportBot.Modules
 
 
 
-        private async Task<ExplorerStatsResponse> GetStats()
+        private async Task<ExplorerStats> GetStats()
         {
             var difficultyResponse = await client.GetAsync($"http://explorer.ccb.cash/api/getdifficulty");
             var masternodeResponse = await client.GetAsync($"http://explorer.ccb.cash/api/getmasternodecount");
-            var supplyResponse = await client.GetAsync($"https://explorer.ipsum.network/api/getsupply");
+            var supplyResponse = await client.GetAsync($"http://explorer.ccb.cash/ext/getmoneysupply");
             var blockResponse = await client.GetAsync($"http://explorer.ccb.cash/api/getblockcount");
 
-            var result = new ExplorerStatsResponse
+
+            var result = new ExplorerStats
             {
                 Difficulty = float.Parse(difficultyResponse.Content.ReadAsStringAsync().Result),
                 MasternodeCount = int.Parse(JsonConvert.DeserializeObject<dynamic>(masternodeResponse.Content.ReadAsStringAsync().Result).ToString()),
                 Block = int.Parse(JsonConvert.DeserializeObject<dynamic>(blockResponse.Content.ReadAsStringAsync().Result).ToString()),
+                Supply = double.Parse(JsonConvert.DeserializeObject<dynamic>(supplyResponse.Content.ReadAsStringAsync().Result).ToString()),
             };
 
             return result;
@@ -73,23 +77,6 @@ namespace DiscordSupportBot.Modules
 
             return result.Result;
         }
-
-
-
-
-        public class ExplorerStatsResponse
-        {
-            public float Difficulty { get; set; }
-            public int MasternodeCount { get; set; }
-            public int Block { get; set; }
-        }
-
-        public enum StatsDataType
-        {
-            Difficulty,
-            MasternodeCount
-        }
-
     }
-    }
+}
 

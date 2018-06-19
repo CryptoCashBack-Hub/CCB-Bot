@@ -26,6 +26,19 @@ namespace DiscordSupportBot.Models.Explorer
         public const double StakingReward = 0.30;
         public const double DevelopmentFee = 0.0;
 
+
+        public float Difficulty { get; set; }
+        public int MasternodeCount { get; set; }
+        public int Block { get; set; }
+        public double Supply { get; set; }
+
+    }
+    public enum StatsDataType
+    {
+        Difficulty,
+        MasternodeCount,
+        Block,
+        Supply
     }
 
 }
