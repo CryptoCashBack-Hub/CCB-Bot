@@ -54,8 +54,10 @@ namespace DiscordSupportBot.Modules
                 .AddField("Complete install script for vps", "https://github.com/CryptoCashBack-Hub/CCB_Sripts")
                 .AddField("Configuration Seed List", "https://github.com/CryptoCashBack-Hub/CCB_Guides/blob/master/Seeds");
 
-            var isBotChannel = this.Context.Channel.Id.Equals(DiscordData.BotChannel);
-            await this.ReplyAsync(string.Empty, false, builder.Build());
+            var isBotChannel = this.Context.Channel.Id.Equals(DiscordSupportBot.Common.DiscordData.BotChannel);
+
+            await this.Context.Guild.GetTextChannel(DiscordSupportBot.Common.DiscordData.BotChannel)
+                .SendMessageAsync(isBotChannel ? string.Empty : this.Context.Message.Author.Mention, false, builder.Build());
         }
 
         /*
@@ -99,18 +101,6 @@ namespace DiscordSupportBot.Modules
             await this.ReplyAsync(string.Empty, false, builder.Build());
         }
         
-        private string GetVoteOptions(string[] options)
-        {
-            var result = string.Empty;
-
-            for (int i = 0; i < options.Length; i++)
-            {
-                result += $"\n{this.VoteOptions[i]} - {options[i]}";
-            }
-
-            return result;
-        }
-
         private async Task<GithubRelease> GetGithubReleaseData()
         {
             client.DefaultRequestHeaders.Add("User-Agent", "request");
