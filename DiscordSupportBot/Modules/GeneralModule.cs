@@ -75,7 +75,6 @@
 
             await this.ReplyAsync(string.Empty, false, builder.Build());
         }
-<<<<<<< HEAD
 
         [Command("createpoll")]
         [Alias("poll")]
