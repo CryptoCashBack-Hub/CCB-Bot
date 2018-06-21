@@ -24,7 +24,7 @@ namespace DiscordSupportBot.Modules
         {
             var builder = new EmbedBuilder();
 
-            builder.WithTitle("Ipsum Bot Help")
+            builder.WithTitle("CCB Bot Help")
                 .WithColor(Discord.Color.Blue)
                 .WithThumbnailUrl("https://masternodes.online/coin_image/CCB.png")
                 .WithFooter("https://github.com/CryptoCashBack-Hub")
@@ -52,7 +52,7 @@ namespace DiscordSupportBot.Modules
 
                 .AddField("The current wallet download", "https://github.com/CryptoCashBack-Hub/CCB/releases")
                 .AddField("Complete install script for vps", "https://github.com/CryptoCashBack-Hub/CCB_Sripts")
-                .AddField("Configuration Seed List", "https://github.com/CryptoCashBack-Hub/CCB_Guides/blob/master/Seeds");
+                .AddField("Configuration Seed List", "https://github.com/CryptoCashBack-Hub/CCB_Guides/tree/master/Seed_List");
 
             var isBotChannel = this.Context.Channel.Id.Equals(DiscordData.BotChannel);
             await this.ReplyAsync(string.Empty, false, builder.Build());
@@ -99,17 +99,7 @@ namespace DiscordSupportBot.Modules
             await this.ReplyAsync(string.Empty, false, builder.Build());
         }
         
-        private string GetVoteOptions(string[] options)
-        {
-            var result = string.Empty;
-
-            for (int i = 0; i < options.Length; i++)
-            {
-                result += $"\n{this.VoteOptions[i]} - {options[i]}";
-            }
-
-            return result;
-        }
+        
 
         private async Task<GithubRelease> GetGithubReleaseData()
         {
