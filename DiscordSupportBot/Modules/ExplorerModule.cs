@@ -52,10 +52,10 @@ namespace DiscordSupportBot.Modules
 
         private async Task<ExplorerStats> GetStats()
         {
-            var difficultyResponse = await client.GetAsync($"http://explorer.ccb.cash/api/getdifficulty");
-            var masternodeResponse = await client.GetAsync($"http://explorer.ccb.cash/api/getmasternodecount");
-            var supplyResponse = await client.GetAsync($"http://explorer.ccb.cash/ext/getmoneysupply");
-            var blockResponse = await client.GetAsync($"http://explorer.ccb.cash/api/getblockcount");
+            var difficultyResponse = await client.GetAsync($"http://explorer.ccbcoin.club/api/getdifficulty");
+            var masternodeResponse = await client.GetAsync($"http://explorer.ccbcoin.club/api/getmasternodecount");
+            var supplyResponse = await client.GetAsync($"http://explorer.ccbcoin.club/ext/getmoneysupply");
+            var blockResponse = await client.GetAsync($"http://explorer.ccbcoin.club/api/getblockcount");
 
 
             var result = new ExplorerStats
@@ -72,7 +72,7 @@ namespace DiscordSupportBot.Modules
 
         private async Task<string> GetAddressBalance(string address)
         {
-            HttpResponseMessage response = await client.GetAsync($"http://explorer.ccb.cash/ext/getbalance/{address}");
+            HttpResponseMessage response = await client.GetAsync($"http://explorer.ccbcoin.club/ext/getbalance/{address}");
             var result = response.Content.ReadAsStringAsync();
 
             return result.Result;

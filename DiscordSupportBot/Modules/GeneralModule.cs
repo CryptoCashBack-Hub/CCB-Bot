@@ -1,4 +1,4 @@
-namespace DiscordSupportBot.Modules
+﻿namespace DiscordSupportBot.Modules
 {
     using Discord;
     using Discord.Commands;
@@ -18,13 +18,14 @@ namespace DiscordSupportBot.Modules
     public class GeneralModule : ModuleBase<SocketCommandContext>
     {
         private static HttpClient client = new HttpClient();
+        private string[] VoteOptions = { "1⃣", "2⃣", "3⃣", "4⃣", "5⃣", "6⃣", "7⃣", "8⃣", "9⃣", "🔟" };
 
         [Command("help")]
         public async Task Help()
         {
             var builder = new EmbedBuilder();
 
-            builder.WithTitle("Ipsum Bot Help")
+            builder.WithTitle("CCB Bot Help")
                 .WithColor(Discord.Color.Blue)
                 .WithThumbnailUrl("https://masternodes.online/coin_image/CCB.png")
                 .WithFooter("https://github.com/CryptoCashBack-Hub")
@@ -52,38 +53,12 @@ namespace DiscordSupportBot.Modules
 
                 .AddField("The current wallet download", "https://github.com/CryptoCashBack-Hub/CCB/releases")
                 .AddField("Complete install script for vps", "https://github.com/CryptoCashBack-Hub/CCB_Sripts")
-                .AddField("Configuration Seed List", "https://github.com/CryptoCashBack-Hub/CCB_Guides/blob/master/Seeds");
+                .AddField("Configuration Seed List", "https://github.com/CryptoCashBack-Hub/CCB_Guides/tree/master/Seed_List");
 
             var isBotChannel = this.Context.Channel.Id.Equals(DiscordData.BotChannel);
             await this.ReplyAsync(string.Empty, false, builder.Build());
         }
 
-        /*
-        [Command("donate")]
-        [Alias("donations")]
-        public async Task Donation()
-        {
-            var builder = new EmbedBuilder();
-
-            var dataBtc = this.GetBtcDonationAddressBalance("1592K4xS5QkXDStELPk9nHBEqZ5vLNAyrm");
-            var dataIps = this.GetIpsDonationAddressBalance("iSv6vXhSbb7WH8D3dVHuWecZ7pGj4AJMmt");
-
-            builder.WithTitle("")
-                .WithColor(Discord.Color.Blue)
-                .WithThumbnailUrl("https://masternodes.online/coin_image/CCB.png")
-                .AddField("Donations will be used for:", "Exchange Listings, Development, and Infrastructure")
-                .AddField("IPS Donation Address:", "iSv6vXhSbb7WH8D3dVHuWecZ7pGj4AJMmt")
-                .AddField("BTC Donation Address:", "1592K4xS5QkXDStELPk9nHBEqZ5vLNAyrm")
-                .AddField("\u200b", "\u200b")
-                .AddField("Current BTC donation balance:", $"{dataBtc.Result} BTC")
-                .AddField("Current IPS donation balance:", $"{dataIps.Result} IPS");
-
-            var isBotChannel = this.Context.Channel.Id.Equals(DiscordSupportBot.Common.DiscordData.BotChannel);
-
-            await this.Context.Guild.GetTextChannel(DiscordSupportBot.Common.DiscordData.BotChannel)
-                .SendMessageAsync(isBotChannel ? string.Empty : this.Context.Message.Author.Mention, false, builder.Build());
-        }
-        */
         [Command("build")]
         [Alias("version")]
         public async Task CurrentBuild()
@@ -98,7 +73,38 @@ namespace DiscordSupportBot.Modules
 
             await this.ReplyAsync(string.Empty, false, builder.Build());
         }
-        
+
+        [Command("createpoll")]
+        [Alias("poll")]
+        public async Task Poll(string question, params string[] options)
+        {
+            var user = this.Context.Message.Author as SocketGuildUser;
+            var permissiveRole = user.Roles.FirstOrDefault(r => r.Name.Equals("DEV Team") || r.Name.Equals("Admin") || r.Name.Equals("Moderator"));
+
+            if (permissiveRole != null)
+            {
+                var builder = new EmbedBuilder();
+                var optionsList = this.GetVoteOptions(options);
+
+                builder.WithTitle($"{question.Trim('?')}?")
+                    .WithDescription(optionsList)
+                    .WithColor(Discord.Color.Blue);
+
+                var message = await this.Context.Guild.GetTextChannel(DiscordSupportBot.Common.DiscordData.BotPollChannel)
+                    .SendMessageAsync(string.Empty, false, builder.Build());
+
+                for (int i = 0; i < options.Length; i++)
+                {
+                    await message.AddReactionAsync(new Emoji(this.VoteOptions[i]));
+                }
+            }
+            else
+            {
+                await this.Context.Message.Author.SendMessageAsync($"not enough permissions for the usage of poll command!");
+            }
+        }
+
+
         private string GetVoteOptions(string[] options)
         {
             var result = string.Empty;
@@ -128,9 +134,9 @@ namespace DiscordSupportBot.Modules
             return decimal.Parse(response, System.Globalization.NumberStyles.AllowDecimalPoint) / 100000000;
         }
 
-        private async Task<decimal> GetIpsDonationAddressBalance(string address)
+        private async Task<decimal> GetCCBDonationAddressBalance(string address)
         {
-            var response = await client.GetStringAsync($"https://explorer.ipsum.network/ext/getbalance/{address}");
+            var response = await client.GetStringAsync($"https://explorer.ccbcoin.club/ext/getbalance/{address}");
 
             return decimal.Parse(response, System.Globalization.NumberStyles.AllowDecimalPoint);
         }
