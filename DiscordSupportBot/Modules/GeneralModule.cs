@@ -119,14 +119,7 @@
 
             return result;
         }
-=======
-        
-<<<<<<< HEAD
-        
->>>>>>> ca7e49414bcbd4623dd36ee25a754da8a9e4dcfc
 
-=======
->>>>>>> 03256413cd84315d0fa06faeff6513bf90c8779d
         private async Task<GithubRelease> GetGithubReleaseData()
         {
             client.DefaultRequestHeaders.Add("User-Agent", "request");
