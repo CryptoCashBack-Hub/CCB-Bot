@@ -55,8 +55,10 @@
                 .AddField("Complete install script for vps", "https://github.com/CryptoCashBack-Hub/CCB_Sripts")
                 .AddField("Configuration Seed List", "https://github.com/CryptoCashBack-Hub/CCB_Guides/tree/master/Seed_List");
 
-            var isBotChannel = this.Context.Channel.Id.Equals(DiscordData.BotChannel);
-            await this.ReplyAsync(string.Empty, false, builder.Build());
+            var isBotChannel = this.Context.Channel.Id.Equals(DiscordSupportBot.Common.DiscordData.BotChannel);
+
+            await this.Context.Guild.GetTextChannel(DiscordSupportBot.Common.DiscordData.BotChannel)
+                .SendMessageAsync(isBotChannel ? string.Empty : this.Context.Message.Author.Mention, false, builder.Build());
         }
 
         [Command("build")]
@@ -73,6 +75,7 @@
 
             await this.ReplyAsync(string.Empty, false, builder.Build());
         }
+<<<<<<< HEAD
 
         [Command("createpoll")]
         [Alias("poll")]
@@ -116,7 +119,14 @@
 
             return result;
         }
+=======
+        
+<<<<<<< HEAD
+        
+>>>>>>> ca7e49414bcbd4623dd36ee25a754da8a9e4dcfc
 
+=======
+>>>>>>> 03256413cd84315d0fa06faeff6513bf90c8779d
         private async Task<GithubRelease> GetGithubReleaseData()
         {
             client.DefaultRequestHeaders.Add("User-Agent", "request");

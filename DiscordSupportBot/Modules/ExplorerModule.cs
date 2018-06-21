@@ -43,7 +43,11 @@ namespace DiscordSupportBot.Modules
                 .AddInlineField("Block Count", result.Block)
                 .AddInlineField("Supply Count",result.Supply + "  CCB")
                 .WithFooter("All block rewards are split: 70% Masternode, 30% Staking and 0% Development fee");
-            await this.ReplyAsync(string.Empty, false, builder.Build());
+
+            var isBotChannel = this.Context.Channel.Id.Equals(DiscordSupportBot.Common.DiscordData.BotChannel);
+
+            await this.Context.Guild.GetTextChannel(DiscordSupportBot.Common.DiscordData.BotChannel)
+                .SendMessageAsync(isBotChannel ? string.Empty : this.Context.Message.Author.Mention, false, builder.Build());
         }
 
 
