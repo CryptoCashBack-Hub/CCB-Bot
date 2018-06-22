@@ -21,7 +21,7 @@ namespace DiscordSupportBot.Modules
         {
             var result = JsonRpcClient.InvokeMethod("getinfo");
 
-            await this.Context.Guild.GetTextChannel(DiscordSupportBot.Common.DiscordData.BotChannel)
+            await this.Context.Guild.GetTextChannel(DiscordData.BotChannel)
                 .SendMessageAsync($"{JsonConvert.DeserializeObject<dynamic>(result).ToString()}");
         }
         
@@ -35,9 +35,9 @@ namespace DiscordSupportBot.Modules
                 ? "Sorry, that Masternode adress was not found in the masternode list!"
                 : $"```Rank: {result.Rank}\nStatus: {result.Status}\nAddress: {result.Address}\nVersion: {result.Version}\nLast Seen: {result.LastSeen.ParseEpochToDateTime()}```";
 
-            var isBotChannel = this.Context.Channel.Id.Equals(DiscordSupportBot.Common.DiscordData.BotChannel);
+            var isBotChannel = this.Context.Channel.Id.Equals(DiscordData.BotChannel);
 
-            await this.Context.Guild.GetTextChannel(DiscordSupportBot.Common.DiscordData.BotChannel)
+            await this.Context.Guild.GetTextChannel(DiscordData.BotChannel)
                 .SendMessageAsync($"{(isBotChannel ? resultString : $"{this.Context.Message.Author.Mention} {resultString}")}");
         }
         
@@ -51,9 +51,9 @@ namespace DiscordSupportBot.Modules
                 ? $"```Connection to {ipPort} was successful!```"
                 : $"```Connection to {ipPort} was unsuccessul, reason: {result.Error.Message}```";
 
-            var isBotChannel = this.Context.Channel.Id.Equals(DiscordSupportBot.Common.DiscordData.BotChannel);
+            var isBotChannel = this.Context.Channel.Id.Equals(DiscordData.BotChannel);
 
-            await this.Context.Guild.GetTextChannel(DiscordSupportBot.Common.DiscordData.BotChannel)
+            await this.Context.Guild.GetTextChannel(DiscordData.BotChannel)
                 .SendMessageAsync($"{(isBotChannel ? resultString : $"{this.Context.Message.Author.Mention} {resultString}")}");
         }
 
