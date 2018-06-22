@@ -27,17 +27,19 @@
 
             builder.WithTitle("CCB Bot Help")
                 .WithColor(Discord.Color.Blue)
-                .WithThumbnailUrl("https://masternodes.online/coin_image/CCB.png")
+                .WithThumbnailUrl("http://chain.ccbcoin.club/images/logo.png")
                 .WithFooter("https://github.com/CryptoCashBack-Hub")
 
                 .AddField("//help", "shows available commands")
                 .AddField("//guides or //guide", "replies with current installation guides")
                 .AddField("//price <ticker> or //checkprice <ticker>", "replies with cmc price")
+                .AddField("//balance <Pubkey>", "replies in private message the balance of address")
                 .AddField("//build or //version", "replies with current wallet realse link");
 
-
             var isBotChannel = this.Context.Channel.Id.Equals(DiscordData.BotChannel);
-            await this.ReplyAsync(string.Empty, false, builder.Build());
+
+            await this.Context.Guild.GetTextChannel(DiscordData.BotChannel)
+                .SendMessageAsync(isBotChannel ? string.Empty : this.Context.Message.Author.Mention, false, builder.Build());
         }
 
         [Command("guide")]
@@ -49,15 +51,15 @@
             builder.WithTitle("Master List of Guides").WithColor(Discord.Color.Blue)
                 .WithDescription("\u200b")
                 .WithUrl("https://github.com/CryptoCashBack-Hub/CCB_Guides")
-                .WithThumbnailUrl("https://masternodes.online/coin_image/CCB.png")
+                .WithThumbnailUrl("http://chain.ccbcoin.club/images/logo.png")
 
                 .AddField("The current wallet download", "https://github.com/CryptoCashBack-Hub/CCB/releases")
                 .AddField("Complete install script for vps", "https://github.com/CryptoCashBack-Hub/CCB_Sripts")
                 .AddField("Configuration Seed List", "https://github.com/CryptoCashBack-Hub/CCB_Guides/tree/master/Seed_List");
 
-            var isBotChannel = this.Context.Channel.Id.Equals(DiscordSupportBot.Common.DiscordData.BotChannel);
+            var isBotChannel = this.Context.Channel.Id.Equals(DiscordData.BotChannel);
 
-            await this.Context.Guild.GetTextChannel(DiscordSupportBot.Common.DiscordData.BotChannel)
+            await this.Context.Guild.GetTextChannel(DiscordData.BotChannel)
                 .SendMessageAsync(isBotChannel ? string.Empty : this.Context.Message.Author.Mention, false, builder.Build());
         }
 
@@ -68,12 +70,15 @@
             var builder = new EmbedBuilder();
 
             builder.WithTitle("The current build is on v1.0.0.1").WithColor(Discord.Color.Blue)
-                .WithThumbnailUrl("https://masternodes.online/coin_image/CCB.png")
+                .WithThumbnailUrl("http://chain.ccbcoin.club/images/logo.png")
                 .WithDescription("\u200b")
 
                 .AddField("Current wallet build!", "https://github.com/CryptoCashBack/CryptoCashBack/releases/");
 
-            await this.ReplyAsync(string.Empty, false, builder.Build());
+            var isBotChannel = this.Context.Channel.Id.Equals(DiscordData.BotChannel);
+
+            await this.Context.Guild.GetTextChannel(DiscordData.BotChannel)
+                .SendMessageAsync(isBotChannel ? string.Empty : this.Context.Message.Author.Mention, false, builder.Build());
         }
 
         [Command("createpoll")]
@@ -92,7 +97,7 @@
                     .WithDescription(optionsList)
                     .WithColor(Discord.Color.Blue);
 
-                var message = await this.Context.Guild.GetTextChannel(DiscordSupportBot.Common.DiscordData.BotPollChannel)
+                var message = await this.Context.Guild.GetTextChannel(DiscordData.BotPollChannel)
                     .SendMessageAsync(string.Empty, false, builder.Build());
 
                 for (int i = 0; i < options.Length; i++)
